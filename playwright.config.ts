@@ -12,7 +12,7 @@ export default defineConfig({
   },
   reporter: [
     ['list'],                     // Show test results in the console
-    ['html', { open: 'never' }]  // Generate HTML report this is a comment 
+    ['html', { open: 'never' }]  // Generate HTML report
   ],
 
   /* Configure projects for major browsers */
