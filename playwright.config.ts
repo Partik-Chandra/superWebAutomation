@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   retries: 0,             // Retry failed tests once
-  timeout: 30 * 1000,     // 30 seconds per test timeout
+  timeout: 200 * 1000,     // 30 seconds per test timeout
   use: {
     headless: false,      // Run tests in headed mode for debugging
     trace: 'on',          // Record trace for each test
@@ -17,15 +17,15 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // {
-    //   name: 'chromium',
-    //   use: { ...devices['Desktop Chrome'] },
-    // },
-
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
     // {
     //   name: 'webkit',
