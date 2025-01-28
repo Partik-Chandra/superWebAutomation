@@ -5,7 +5,7 @@ export default defineConfig({
   retries: 0,             // Retry failed tests once
   timeout: 200 * 1000,     // 30 seconds per test timeout
   use: {
-    headless: false,      // Run tests in headed mode for debugging
+    headless: true,      // Run tests in headed mode for debugging
     trace: 'on',          // Record trace for each test
     screenshot: 'only-on-failure', // Capture screenshots only on failures
     video: 'retain-on-failure',     // Record video on failures
@@ -19,12 +19,15 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'],
+       },
     },
 
     // {
     //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
+    //   use: { ...devices['Desktop Firefox'], 
+    //     headless: false,
+    //   },
     // },
 
     // {
