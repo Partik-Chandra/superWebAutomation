@@ -26,8 +26,8 @@ export class LoginPage {
   }
 
   // Navigate to the learn.iprep.in website
-  async goto() {
-    await this.page.goto('https://test.iprep.in/');
+  async goto(url: string) {
+    await this.page.goto(url);
   }
 
   // Fill the mobile no. in mobile no. input field
