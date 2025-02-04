@@ -10,7 +10,7 @@ test.describe('Video Content Sharing Test', () => {
     await pm.loginPage.goto('https://test.iprep.in/');
   });
 
-  // Test Case: Check if the Video Plying through the Shared link is the Shared Video
+  // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the same tab
   test.only('Verify that the video playing through the shared link matches the original video in the same tab', async ({ page }) => {
 
     // login
@@ -51,7 +51,7 @@ test.describe('Video Content Sharing Test', () => {
     expect(actualVideoTopic).toContain(expectedVideoTopic);
   });
 
-  // Test Case: Check if the Video Playing through the Shared link is the Shared Video
+  // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new tab
   test.only('Verify that the video playing through the shared link matches the original video in a new tab', async ({ page }) => {
 
     // login
@@ -101,6 +101,7 @@ test.describe('Video Content Sharing Test', () => {
     expect(actualVideoTopic).toContain(expectedVideoTopic);
   });
 
+  // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new browser tab
   test.only('Verify that the video playing through the shared link matches the original video in a new browser', async () => {
           
           // Login
@@ -131,7 +132,7 @@ test.describe('Video Content Sharing Test', () => {
           // Get the value of the share code
           let shareCode = await pm.videos.getShareCode();
   
-          // ***** FIX: Launch a new browser instance after getting shareCode *****
+          // Launch a new browser instance after getting shareCode
           const newBrowser = await chromium.launch();
           const newContext = await newBrowser.newContext();
           const newPage = await newContext.newPage();
