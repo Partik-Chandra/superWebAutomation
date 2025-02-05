@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   retries: 0,             // Retry failed tests once
-  timeout: 200 * 1000,     // 30 seconds per test timeout
+  timeout: 200 * 1000,      // 30 seconds per test timeout     
   use: {
     headless: true,      // Run tests in headed mode for debugging
     trace: 'on',          // Record trace for each test
@@ -11,17 +11,17 @@ export default defineConfig({
     video: 'retain-on-failure',     // Record video on failures
   },
   reporter: [
-    ['list'],                     // Show test results in the console
+    ['list', { printSteps: true }],                     // Show test results in the console
     ['html', { open: 'never' }]  // Generate HTML report
   ],
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'],
-       },
-    },
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'],
+    //    },
+    // },
 
     // {
     //   name: 'firefox',
@@ -50,9 +50,9 @@ export default defineConfig({
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    {
+      name: 'Google Chrome',
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    },
   ],
 });
