@@ -33,16 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: lts/*
-    - name: Upload Playwright Report to GitHub Pages
+    - name: Copy Playwright Report to Output Folder
       run: |
         mkdir output
         cp -r playwright-report/* output/
         touch output/.nojekyll
-        echo "Playwright Report deployed!" > output/README.md
+    - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
