@@ -1,6 +1,8 @@
 node_modules/
 /test-results/
-/playwright-report/
+/playwright-report/data
+/playwright-report/trace
+/playwright-report/index.html
 /blob-report/
 /playwright/.cache/
 .DS_Store
