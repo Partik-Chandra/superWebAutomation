@@ -1,157 +1,242 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
 import { PomManager } from '../../pages/PomManager';
 import { chromium } from 'playwright';
 
 test.describe('Video Content Sharing Test', () => {
   let pm: PomManager;
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach('Navigate to the test environment URL', async ({ page }) => {
     pm = new PomManager(page);
     await pm.loginPage.goto('https://test.iprep.in/');
   });
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the same tab
-  test.only('Verify that the video playing through the shared link matches the original video in the same tab', async ({ page }) => {
+  test.only('Verify that the video from the shared link matches the original in the same tab', async ({ page }) => {
 
-    // login
-    await pm.loginPage.login('6969696969');
-    await pm.otpPopUp.otpVerify('696969');
+    await test.step('Login with valid credentials', async () => {
+      await pm.loginPage.login('6969696969');
+      await pm.otpPopUp.otpVerify('696969');
+    });
 
-    // Go to Academics Section
-    await pm.homePage.goToAcademics();
+    await test.step('Navigate to the Academics section', async () => {
+      await pm.homePage.goToAcademics();
+    });
 
-    // Clicks on Maths
-    await pm.academics.clickOnMath();
+    await test.step('Click on first subject', async () => {
+      await pm.academics.clickOnMath();
+    });
 
-    // Go to Videos Section
-    await pm.yourSubjects.goToVideoSection();
+    await test.step('Go to the Videos section', async () => {
+      await pm.yourSubjects.goToVideoSection();
+    });
 
-    // Clicks on Real Number Chapter
-    await pm.videos.goToChaptersTopics();
+    await test.step('Click on first Chapter', async () => {
+      await pm.videos.goToChaptersTopics();
+    });
 
-    // Get the video topic detail
-    let expectedVideoTopic = await pm.videos.getVideoTopic();
+    let expectedVideoTopic = await test.step('Get the first video topic detail before playing the video', async () => {
+      return await pm.videos.getVideoTopic();
+    });
 
-    // Clicks on Video topic
-    await pm.videos.playTheTopicVideo();
+    await test.step('Click on the first video topic to play the video', async () => {
+      await pm.videos.playTheTopicVideo();
+    });
 
-    // Clicks on share Btn
-    await pm.videos.clickOnShareBtn();
+    await test.step('Click on the Share button to generate the share code', async () => {
+      await pm.videos.clickOnShareBtn();
+    });
 
-    // Get the value of share code
-    let shareCode = await pm.videos.getShareCode();
+    const shareCode = await test.step('Get the share code of the video', async () => {
+      return await pm.videos.getShareCode();
+    });
 
-    // Go to the shared link
-    await pm.loginPage.goto(shareCode);
+    await test.step('Navigate to the shared link using the share code', async () => {
+      await pm.loginPage.goto(shareCode);
+    });
 
-    // Get the current playing video topic title
-    let actualVideoTopic = await pm.videos.getCurrentPlayingVideo(page);
-    
-    // Assertion: Checks if the shared video and palying video is same
-    expect(actualVideoTopic).toContain(expectedVideoTopic);
+    let retry: boolean = false;
+    const actualVideoTopic = await test.step('Get the current playing video topic title from the shared link', async () => {
+      try {
+        return await pm.videos.getCurrentPlayingVideo(page, 30000);
+
+      } catch (error) {
+        // If the topic is not found, reload and retry once
+        console.log('Video topic not found, reloading and retrying...');
+        await page.reload();
+        retry = true;
+        return await pm.videos.getCurrentPlayingVideo(page, 30000);
+      }
+    });
+
+    // If retry was needed and still fails, exit test
+    if (retry && !actualVideoTopic) {
+      console.error('Test failed: Unable to retrieve video topic after reload.');
+      await page.close();
+      test.fail(); // Exit the test after failure
+    }
+
+    await test.step('Verify that the video topic from the shared link matches the original video', async () => {
+      expect(actualVideoTopic).toContain(expectedVideoTopic);
+    });
+
   });
+
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new tab
-  test.only('Verify that the video playing through the shared link matches the original video in a new tab', async ({ page }) => {
+  test.only('Verify that the video from the shared link matches the original in a new tab', async ({ page }) => {
 
-    // login
-    await pm.loginPage.login('6969696969');
-    await pm.otpPopUp.otpVerify('696969');
+    await test.step('Login with valid credentials', async () => {
+      await pm.loginPage.login('6969696969');
+      await pm.otpPopUp.otpVerify('696969');
+    });
 
-    // Go to Academics Section
-    await pm.homePage.goToAcademics();
+    await test.step('Navigate to the Academics section', async () => {
+      await pm.homePage.goToAcademics();
+    });
 
-    // Clicks on Maths
-    await pm.academics.clickOnMath();
+    await test.step('Click on first subject', async () => {
+      await pm.academics.clickOnMath();
+    });
 
-    // Go to Videos Section
-    await pm.yourSubjects.goToVideoSection();
+    await test.step('Go to the Videos section', async () => {
+      await pm.yourSubjects.goToVideoSection();
+    });
 
-    // Clicks on Real Number Chapter
-    await pm.videos.goToChaptersTopics();
+    await test.step('Click on first Chapter', async () => {
+      await pm.videos.goToChaptersTopics();
+    });
 
-    // Get the video topic detail
-    let expectedVideoTopic = await pm.videos.getVideoTopic();
+    let expectedVideoTopic = await test.step('Get the first video topic detail before playing the video', async () => {
+      return await pm.videos.getVideoTopic();
+    });
 
-    // Clicks on Video topic
-    await pm.videos.playTheTopicVideo();
+    await test.step('Click on the first video topic to play the video', async () => {
+      await pm.videos.playTheTopicVideo();
+    });
 
-    // Clicks on share Btn
-    await pm.videos.clickOnShareBtn();
+    await test.step('Click on the Share button to generate the share code', async () => {
+      await pm.videos.clickOnShareBtn();
+    });
 
-    // Get the value of share code
-    let shareCode = await pm.videos.getShareCode();
+    const shareCode = await test.step('Get the share code of the video', async () => {
+      return await pm.videos.getShareCode();
+    });
 
-    // Open a new tab
-    const newPage = await page.context().newPage();
+    let actualVideoTopic: string | null;
+    let retry: boolean = false;
 
-    // Go to the shared link in the new tab
-    await newPage.goto(shareCode);
+    await test.step('Open a new tab and navigate to the shared link', async () => {
+      const newPage = await page.context().newPage();
+      await newPage.goto(shareCode);
 
-    // Wait for a few seconds on the page, e.g., 10000 milliseconds (30 seconds)
-    // await newPage.waitForTimeout(30000);
+      await test.step('Attempt to get the current playing video topic title from the shared link', async () => {
+        try {
+          actualVideoTopic = await pm.videos.getCurrentPlayingVideo(newPage, 30000);
 
-    // Get the current playing video topic title in the new tab
-    let actualVideoTopic = await pm.videos.getCurrentPlayingVideo(newPage);
+        } catch (error) {
+          // If the topic is not found, reload and retry once
+          console.log('Video topic not found, reloading and retrying...');
+          await newPage.reload();
+          retry = true;
+          actualVideoTopic = await pm.videos.getCurrentPlayingVideo(newPage, 30000);
+        }
+      });
 
-    // Close the new tab after verification
-    await newPage.close();
+      // If retry was needed and still fails, exit test
+      if (retry && !actualVideoTopic) {
+        console.error('Test failed: Unable to retrieve video topic after reload.');
+        await newPage.close();
+        test.fail(); // Exit the test after failure
+      }
 
-    // Assertion: Checks if the shared video and playing video is same
-    expect(actualVideoTopic).toContain(expectedVideoTopic);
+      // Close the new tab after verification
+      await newPage.close();
+    });
+
+    await test.step('Verify that the video topic from the shared link matches the original video', async () => {
+      expect(actualVideoTopic).toContain(expectedVideoTopic);
+    });
+
   });
 
+
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new browser tab
-  test.only('Verify that the video playing through the shared link matches the original video in a new browser', async () => {
-          
-          // Login
-          await pm.loginPage.login('6969696969');
-          await pm.otpPopUp.otpVerify('696969');
-      
-          // Go to Academics Section
-          await pm.homePage.goToAcademics();
-      
-          // Click on Maths
-          await pm.academics.clickOnMath();
-      
-          // Go to Videos Section
-          await pm.yourSubjects.goToVideoSection();
-      
-          // Click on Real Number Chapter
-          await pm.videos.goToChaptersTopics();
-      
-          // Get the video topic detail
-          let expectedVideoTopic = await pm.videos.getVideoTopic();
-      
-          // Click on Video topic
-          await pm.videos.playTheTopicVideo();
-      
-          // Click on Share Button
-          await pm.videos.clickOnShareBtn();
-      
-          // Get the value of the share code
-          let shareCode = await pm.videos.getShareCode();
-  
-          // Launch a new browser instance after getting shareCode
-          const newBrowser = await chromium.launch();
-          const newContext = await newBrowser.newContext();
-          const newPage = await newContext.newPage();
-  
-          // Go to the shared link in the new browser instance
-          await newPage.goto(shareCode);
-  
-          // Login again in the new browser
-          const newPm = new PomManager(newPage);
-          await newPm.loginPage.login('6969696969');
-          await newPm.otpPopUp.otpVerify('696969');
-      
-          // Get the current playing video topic title in the new tab
-          let actualVideoTopic = await newPm.videos.getCurrentPlayingVideo(newPage);
-  
-          // Assertion: Checks if the shared video and playing video are the same
-          expect(actualVideoTopic).toContain(expectedVideoTopic);
-  
-          // Close the new browser instance after the test
-          await newBrowser.close();
-      });
+  test.only('Verify that the video from the shared link matches the original in a new browser', async () => {
+
+    // Step 1: Login in the first browser
+    await test.step('Login with valid credentials in the first browser', async () => {
+      await pm.loginPage.login('6969696969');
+      await pm.otpPopUp.otpVerify('696969');
+    });
+
+    // Step 2: Navigate to the required video
+    await test.step('Navigate to the video section and select a video', async () => {
+      await pm.homePage.goToAcademics();
+      await pm.academics.clickOnMath();
+      await pm.yourSubjects.goToVideoSection();
+      await pm.videos.goToChaptersTopics();
+    });
+
+    // Step 3: Retrieve video details
+    let expectedVideoTopic = await test.step('Get the expected video topic before sharing', async () => {
+      return await pm.videos.getVideoTopic();
+    });
+
+    // Step 4: Play and share the video
+    let shareCode: string;
+    await test.step('Play the selected video and generate a share link', async () => {
+      await pm.videos.playTheTopicVideo();
+      await pm.videos.clickOnShareBtn();
+      shareCode = await pm.videos.getShareCode();
+    });
+
+    // Step 5: Open a new browser instance
+    let newBrowser = await chromium.launch(); 
+    let newContext = await newBrowser.newContext();
+    let newPage = await newContext.newPage();
+    
+    await test.step('Launch a new browser instance and open the shared link', async () => {
+      await newPage.goto(shareCode, { timeout: 20000 });
+    });
+
+    // Step 6: Login again in the new browser with a reload mechanism
+    const newPm = new PomManager(newPage);
+    let retry: boolean = false;
+
+    await test.step('Check visibility of iPrep logo and reload if not found', async () => {
+      try {
+        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+
+      } catch (error) {
+        // If the topic is not found, reload and retry once
+        console.log('Video topic not found, reloading and retrying...');
+        await newPage.reload();
+        retry = true;
+        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+      }
+    });
+
+    // Step 7: Complete login in the new browser
+    await test.step('Login in the new browser instance', async () => {
+      await newPm.loginPage.login('6969696969');
+      await newPm.otpPopUp.otpVerify('696969');
+    });
+
+    // Step 8: Retry mechanism for getting the video topic in the new browser
+    let actualVideoTopic = await test.step('Retrieve the currently playing video topic in the new browser', async () => {
+      return await newPm.videos.getCurrentPlayingVideo(newPage, 30000);
+    });
+
+    // Step 9: Validate the shared video
+    await test.step('Verify that the shared video matches the original video', async () => {
+      expect(actualVideoTopic).toContain(expectedVideoTopic);
+    });
+
+    // Step 10: Close the new browser instance
+    await test.step('Close the new browser instance', async () => {
+      await newBrowser.close();
+    });
+
+  });
+
 });

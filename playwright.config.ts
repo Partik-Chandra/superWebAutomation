@@ -11,7 +11,7 @@ export default defineConfig({
     video: 'retain-on-failure',     // Record video on failures
   },
   reporter: [
-    ['list', { printSteps: true }],                     // Show test results in the console
+    ['list', { printSteps: true }], // Show test results in the console
     ['html', { open: 'never' }]  // Generate HTML report
   ],
 

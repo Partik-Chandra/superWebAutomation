@@ -18,7 +18,7 @@ export class Videos {
         this.videoShareButton = page.locator('.sharebutton > .flex');
         this.videoShareCode = page.getByRole('textbox');
         this.copyBtn = page.getByRole('button', { name: 'Copy' });
-        this.currentlyPlaying = page.getByText('Currently Playing');
+        this.currentlyPlaying = page.locator('//i[@style]');
     }
 
     // Clicks on the chapter in Chapter list
@@ -57,7 +57,7 @@ export class Videos {
     }
 
     // Get the topic of Currently playing Video
-    async getCurrentPlayingVideo(newPage: Page) {
-        return newPage.getByText('Currently Playing').locator('xpath=preceding-sibling::span').textContent();
+    async getCurrentPlayingVideo(newPage: Page, timeout: number) {
+        return newPage.locator('//i[@style]').locator('xpath=preceding-sibling::span').textContent({ timeout });
     }
 }
