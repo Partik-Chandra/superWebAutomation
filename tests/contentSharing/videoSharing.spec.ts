@@ -11,7 +11,7 @@ test.describe('Video Content Sharing Test', () => {
   });
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the same tab
-  test.only('Verify that the video playing through the shared link matches the original video in the same tab', async ({ page }) => {
+  test.only('Verify that the video from the shared link matches the original in the same tab', async ({ page }) => {
 
     await test.step('Login with valid credentials', async () => {
       await pm.loginPage.login('6969696969');
@@ -83,7 +83,7 @@ test.describe('Video Content Sharing Test', () => {
 
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new tab
-  test.only('Verify that the video playing through the shared link matches the original video in a new tab', async ({ page }) => {
+  test.only('Verify that the video from the shared link matches the original in a new tab', async ({ page }) => {
 
     await test.step('Login with valid credentials', async () => {
       await pm.loginPage.login('6969696969');
@@ -161,7 +161,7 @@ test.describe('Video Content Sharing Test', () => {
 
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new browser tab
-  test.only('Verify that the video playing through the shared link matches the original video in a new browser', async () => {
+  test.only('Verify that the video from the shared link matches the original in a new browser', async () => {
 
     // Step 1: Login in the first browser
     await test.step('Login with valid credentials in the first browser', async () => {

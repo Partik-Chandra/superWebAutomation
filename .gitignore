@@ -1,6 +1,9 @@
 node_modules/
 /test-results/
-/playwright-report/
+/playwright-report/data
+/playwright-report/trace
 /blob-report/
 /playwright/.cache/
 .DS_Store
+package-lock.json
+playwright.config.ts
