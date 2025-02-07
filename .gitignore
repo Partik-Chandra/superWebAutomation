@@ -2,6 +2,7 @@ node_modules/
 /test-results/
 /playwright-report/data
 /playwright-report/trace
+
 /blob-report/
 /playwright/.cache/
 .DS_Store
