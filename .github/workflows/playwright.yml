@@ -41,7 +41,7 @@ jobs:
     - name: Copy New Reports
       run: |
         mkdir -p test-reports
-        cp -r playwright-report/* test-reports/
+        cp -r test-reports/
         git add test-reports
         git commit -m "Update Playwright Test Reports [$(date)]" || echo "No changes to commit"
         git push origin main
