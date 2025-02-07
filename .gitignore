@@ -2,7 +2,9 @@ node_modules/
 /test-results/
 /playwright-report/data
 /playwright-report/trace
-/playwright-report/index.html
+
 /blob-report/
 /playwright/.cache/
 .DS_Store
+package-lock.json
+playwright.config.ts
