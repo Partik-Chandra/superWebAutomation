@@ -2,6 +2,7 @@ import { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
+  readonly iPrepLogo: Locator;
   readonly inputMobileNumber: Locator;
   readonly continueBtn: Locator;
   readonly googleSSOBtn: Locator;
@@ -11,8 +12,11 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
 
+    this.iPrepLogo = page.getByRole('img', { name: 'logo' }); // Locator for iPrep logo at iprep page
+
     // Locator the mobileno input field
     this.inputMobileNumber = page.locator('.input_mob_number');
+
     // Locator the continue button
     this.continueBtn = page.locator(".btn_continue");
 
@@ -49,5 +53,10 @@ export class LoginPage {
   // Get the error msg text for invalid login details (Mobile No)
   async getErrorMsgForInvalidMobileNo() {
     return await this.errorMessage.textContent();
+  }
+
+  // Check visibility of iPrep logo at login page
+  async checkVisibilityOfLogo(newPage: Page, timeout: number) {
+    await newPage.getByRole('img', { name: 'logo' }).isVisible({timeout});
   }
 }

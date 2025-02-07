@@ -22,6 +22,5 @@ export class YourSubjects {
     async goToPracticeSection() {
         await this.practiceHeader.click();
     }
-
-    
+  
 }
