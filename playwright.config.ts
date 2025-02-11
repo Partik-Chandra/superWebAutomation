@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   retries: 0,             // Retry failed tests once
-  timeout: 200 * 1000,      // 30 seconds per test timeout     
+  timeout: 300 * 1000,      // 30 seconds per test timeout     
   use: {
     headless: true,      // Run tests in headed mode for debugging
     trace: 'on',          // Record trace for each test

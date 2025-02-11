@@ -11,7 +11,7 @@ test.describe('Practice Content Sharing Test', () => {
     });
 
     // Test Case: Check if the Practice Test opened through the Shared link is the Shared Practice Test in the same tab
-    test.only('Verify that the practice test from the shared link matches the original in the same tab', async ({ page }) => {
+    test('Verify that the practice test from the shared link matches the original in the same tab', async ({ page }) => {
 
         await test.step('Login with valid credentials', async () => {
             await pm.loginPage.login('6969696969');
@@ -79,7 +79,7 @@ test.describe('Practice Content Sharing Test', () => {
 
 
     // Test Case: Check if the Practice test opened through the Shared link is the Shared Practice test in the new tab
-    test.only('Verify that the practice test from the shared link matches the original in a new tab', async ({ page }) => {
+    test('Verify that the practice test from the shared link matches the original in a new tab', async ({ page }) => {
 
         await test.step('Login with valid credentials', async () => {
             await pm.loginPage.login('6969696969');
@@ -123,14 +123,14 @@ test.describe('Practice Content Sharing Test', () => {
 
             await test.step('Attempt to get the current opened practice topic title from the shared link', async () => {
                 try {
-                    actualPracticeTopic = await pm.practice.getCurrentOpenedPractice(page, 30000);
+                    actualPracticeTopic = await pm.practice.getCurrentOpenedPractice(newPage, 30000);
 
                 } catch (error) {
                     // If the topic is not found, reload and retry once
                     console.log('Practice topic not found, reloading and retrying...');
                     await newPage.reload();
                     retry = true;
-                    actualPracticeTopic = await pm.practice.getCurrentOpenedPractice(page, 30000);
+                    actualPracticeTopic = await pm.practice.getCurrentOpenedPractice(newPage, 30000);
                 }
             });
 
@@ -152,7 +152,7 @@ test.describe('Practice Content Sharing Test', () => {
     });
 
 
-    // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new browser tab
+    // Test Case: Check if the Practice opened through the Shared link is the Shared Practice in the new browser tab
     test.only('Verify that the practice test from the shared link matches the original in a new browser', async () => {
 
         // Step 1: Login in the first browser
@@ -194,16 +194,16 @@ test.describe('Practice Content Sharing Test', () => {
         const newPm = new PomManager(newPage);
         let retry: boolean = false;
 
-        await test.step('Check visibility of iPrep logo and reload if not found', async () => {
+        await test.step('Check visibility of Lets Get Started Text and reload if not found', async () => {
             try {
-                await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+                expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
 
             } catch (error) {
                 // If the topic is not found, reload and retry once
-                console.log('Video topic not found, reloading and retrying...');
+                console.log('Practice topic not found, reloading and retrying...');
                 await newPage.reload();
                 retry = true;
-                await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+                expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
             }
         });
 
@@ -213,13 +213,13 @@ test.describe('Practice Content Sharing Test', () => {
             await newPm.otpPopUp.otpVerify('696969');
         });
 
-        // Step 8: Retry mechanism for getting the video topic in the new browser
+        // Step 8: Retry mechanism for getting the practice topic in the new browser
         let actualPracticeTopic = await test.step('Retrieve the currently opened practice topic in the new browser', async () => {
             return await newPm.practice.getCurrentOpenedPractice(newPage, 30000);
         });
 
 
-        // Step 9: Validate the shared video
+        // Step 9: Validate the shared Practice
         await test.step('Verify that the shared practice matches the original practice', async () => {
             expect(actualPracticeTopic).toContain(expectedPracticeTopic);
         });

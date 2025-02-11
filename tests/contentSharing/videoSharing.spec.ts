@@ -11,7 +11,7 @@ test.describe('Video Content Sharing Test', () => {
   });
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the same tab
-  test.only('Verify that the video from the shared link matches the original in the same tab', async ({ page }) => {
+  test('Verify that the video from the shared link matches the original in the same tab', async ({ page }) => {
 
     await test.step('Login with valid credentials', async () => {
       await pm.loginPage.login('6969696969');
@@ -83,7 +83,7 @@ test.describe('Video Content Sharing Test', () => {
 
 
   // Test Case: Check if the Video Playing through the Shared link is the Shared Video in the new tab
-  test.only('Verify that the video from the shared link matches the original in a new tab', async ({ page }) => {
+  test('Verify that the video from the shared link matches the original in a new tab', async ({ page }) => {
 
     await test.step('Login with valid credentials', async () => {
       await pm.loginPage.login('6969696969');
@@ -203,16 +203,16 @@ test.describe('Video Content Sharing Test', () => {
     const newPm = new PomManager(newPage);
     let retry: boolean = false;
 
-    await test.step('Check visibility of iPrep logo and reload if not found', async () => {
+    await test.step('Check visibility of Lets Get Started Text and reload if not found', async () => {
       try {
-        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+        expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
 
       } catch (error) {
         // If the topic is not found, reload and retry once
         console.log('Video topic not found, reloading and retrying...');
         await newPage.reload();
         retry = true;
-        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+        expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
       }
     });
 
