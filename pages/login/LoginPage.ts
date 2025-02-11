@@ -2,7 +2,7 @@ import { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
-  readonly iPrepLogo: Locator;
+  readonly iPrepText: string;
   readonly inputMobileNumber: Locator;
   readonly continueBtn: Locator;
   readonly googleSSOBtn: Locator;
@@ -12,7 +12,7 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
 
-    this.iPrepLogo = page.getByRole('img', { name: 'logo' }); // Locator for iPrep logo at iprep page
+    this.iPrepText = '.login_card .content_box h5'; // Locator for Let's Get Started text
 
     // Locator the mobileno input field
     this.inputMobileNumber = page.locator('.input_mob_number');
@@ -55,8 +55,8 @@ export class LoginPage {
     return await this.errorMessage.textContent();
   }
 
-  // Check visibility of iPrep logo at login page
-  async checkVisibilityOfLogo(newPage: Page, timeout: number) {
-    await newPage.getByRole('img', { name: 'logo' }).isVisible({timeout});
+  // Get Lets Get Started text at login page
+  async getLetsGetStartedText(newPage: Page, timeout: number) {
+    return await newPage.locator(this.iPrepText).textContent({timeout});
   }
 }
