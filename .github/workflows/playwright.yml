@@ -47,18 +47,20 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         
-        # Create gh-pages branch if it doesn't exist
         git fetch origin gh-pages || true
         git checkout -B gh-pages
         
-        # Clear old reports and copy the new one
         rm -rf *
-        cp -r playwright-report/* .
         
-        # Prevent GitHub Pages from ignoring files
+        # Correcting the copy command
+        cp -r playwright-report/. .   # The dot (.) ensures all files are copied
+        
         touch .nojekyll
         
-        # Commit and push
+        git add .
+        git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
+        git push origin gh-pages --force
+
         git add .
         git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
         git push origin gh-pages --force
