@@ -47,8 +47,8 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         
-        git fetch origin gh-pages || true
-        git checkout -B gh-pages
+        git fetch origin main || true
+        git checkout -B main
         
         rm -rf *
         
@@ -59,8 +59,8 @@ jobs:
         
         git add .
         git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-        git push origin gh-pages --force
+        git push origin main --force
 
         git add .
         git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-        git push origin gh-pages --force
+        git push origin main --force
