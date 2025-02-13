@@ -55,7 +55,7 @@ jobs:
         rm -rf *
         
         # Correcting the copy command
-        cp -r playwright-report/. .   # The dot (.) ensures all files are copied
+        cp -r playwright-report/* .   
         
         touch .nojekyll
         
