@@ -49,7 +49,9 @@ jobs:
         
         git fetch origin main || true
         git checkout -B main
-        
+
+        echo "Checking if playwright-report exists before copying..."
+        ls -la playwright-report/ || echo "playwright-report/ is missing!"
         rm -rf *
         
         # Correcting the copy command
