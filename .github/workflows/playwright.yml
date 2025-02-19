@@ -71,11 +71,11 @@ jobs:
           # Make sure we're on the main branch
           git checkout main
           
-          # Create (or update) the playwright-report directory in the repo
-          mkdir -p playwright-report
-          cp -r playwright-report/* playwright-report/
+          # Move the report to a dedicated folder (instead of copying onto itself)
+          mkdir -p test-reports
+          mv playwright-report/* test-reports/
           
           # Add and commit the changes
-          git add playwright-report/
+          git add test-reports/
           git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
           git push origin main
