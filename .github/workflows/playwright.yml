@@ -54,15 +54,20 @@ jobs:
         ls -la playwright-report/ || echo "playwright-report/ is missing!"
         rm -rf *
         
-        # Correcting the copy command
-        cp -r playwright-report/* .   
+        # Debug: Verify again before copying
+        echo "Checking if playwright-report exists before copying..."
+        ls -la playwright-report/ || echo "playwright-report/ is missing!"
+        
+        # Ensure the directory exists before copying
+        if [ -d "playwright-report" ]; then
+          cp -r playwright-report/* .  # FIXED: Correct way to copy
+        else
+          echo "ERROR: playwright-report directory is missing!"
+          exit 1
+        fi
         
         touch .nojekyll
         
         git add .
         git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-        git push origin main --force
-
-        git add .
-        git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-        git push origin main --force
+        git push origin gh-pages --force
