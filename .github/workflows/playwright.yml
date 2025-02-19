@@ -28,7 +28,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test || true  # Ensures workflow continues even if tests fail
 
-      - name: Debug: Check If Playwright Report Exists
+      - name: Debug Check If Playwright Report Exists
         run: |
           echo "Checking if playwright-report directory exists..."
           ls -la || echo "Root directory not found!"
@@ -56,7 +56,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
 
-      - name: Debug: Verify Downloaded Files
+      - name: Debug Verify Downloaded Files
         run: |
           echo "Listing root directory:"
           ls -la
