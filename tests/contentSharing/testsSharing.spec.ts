@@ -11,7 +11,7 @@ test.describe('Tests Content Sharing Test', () => {
     });
 
     // Test Case: Check if the Test opened through the Shared link is the Shared Test in the same tab
-    test('Verify that the test from the shared link matches the original in the same tab', async ({ page }) => {
+    test.only('Verify that the test from the shared link matches the original in the same tab', async ({ page }) => {
 
         await test.step('Login with valid credentials', async () => {
             await pm.loginPage.login('6969696969');
@@ -85,7 +85,7 @@ test.describe('Tests Content Sharing Test', () => {
 
 
     // Test Case: Check if the Test opened through the Shared link is the Shared Test in the new tab
-    test('Verify that the Test from the shared link matches the original in a new tab', async ({ page }) => {
+    test.only('Verify that the Test from the shared link matches the original in a new tab', async ({ page }) => {
 
         await test.step('Login with valid credentials', async () => {
             await pm.loginPage.login('6969696969');
