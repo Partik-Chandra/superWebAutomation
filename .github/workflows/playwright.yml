@@ -63,28 +63,19 @@ jobs:
           echo "Listing playwright-report directory:"
           ls -la playwright-report/ || echo "ERROR: playwright-report/ not found!"
 
-      - name: Deploy Playwright Report to GitHub Pages
+      - name: Commit Playwright Report to Main Branch
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          git fetch origin main || git checkout -b main
-          git checkout main || git checkout -b main
+          # Make sure we're on the main branch
+          git checkout main
           
-          rm -rf *
+          # Create (or update) the playwright-report directory in the repo
+          mkdir -p playwright-report
+          cp -r playwright-report/* playwright-report/
           
-          echo "Checking if playwright-report exists before copying..."
-          ls -la playwright-report/ || echo "ERROR: playwright-report is missing!"
-          
-          if [ -d "playwright-report" ]; then
-            cp -r playwright-report/* .
-          else
-            echo "ERROR: playwright-report directory is missing!"
-            exit 1
-          fi
-          
-          touch .nojekyll
-          
-          git add .
+          # Add and commit the changes
+          git add playwright-report/
           git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-          git push origin main --force
+          git push origin main
