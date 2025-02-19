@@ -203,16 +203,16 @@ test.describe('Video Content Sharing Test', () => {
     const newPm = new PomManager(newPage);
     let retry: boolean = false;
 
-    await test.step('Check visibility of iPrep logo and reload if not found', async () => {
+    await test.step('Check visibility of Lets Get Started Text and reload if not found', async () => {
       try {
-        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+        expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
 
       } catch (error) {
         // If the topic is not found, reload and retry once
         console.log('Video topic not found, reloading and retrying...');
         await newPage.reload();
         retry = true;
-        await newPm.loginPage.checkVisibilityOfLogo(newPage, 30000);
+        expect(await newPm.loginPage.getLetsGetStartedText(newPage, 20000)).toContain("Let's Get Started");
       }
     });
 

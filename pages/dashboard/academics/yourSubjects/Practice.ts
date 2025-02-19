@@ -19,6 +19,7 @@ export class Practice {
 
     // Clicks on the chapter in Practice Test
     async clickOnPracticeTest() {
+        // await this.page.waitForTimeout(3000); // Wait for 3 seconds
         await this.chapterList.click();
     }
 

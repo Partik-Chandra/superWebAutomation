@@ -10,6 +10,7 @@ import { Academics } from "./dashboard/academics/Academics";
 import { YourSubjects } from "./dashboard/academics/yourSubjects/YourSubjects";
 import { Videos } from "./dashboard/academics/yourSubjects/Videos";
 import { Practice } from "./dashboard/academics/yourSubjects/Practice";
+import { Tests } from "./dashboard/academics/yourSubjects/Tests";
 
 export class PomManager {
     readonly page: Page;
@@ -28,6 +29,7 @@ export class PomManager {
     readonly yourSubjects: YourSubjects;
     readonly videos: Videos;
     readonly practice: Practice;
+    readonly tests: Tests;
 
     constructor(page: Page) {
         this.page = page;
@@ -46,5 +48,6 @@ export class PomManager {
         this.yourSubjects = new YourSubjects(page);
         this.videos = new Videos(page);
         this.practice = new Practice(page);
+        this.tests = new Tests(page);
     }
 }
