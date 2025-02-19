@@ -73,6 +73,7 @@ jobs:
           
           # Move the report to a dedicated folder (instead of copying onto itself)
           mkdir -p test-reports
+          rm -rf test-reports/data test-reports/trace
           mv playwright-report/* test-reports/
           
           # Add and commit the changes
