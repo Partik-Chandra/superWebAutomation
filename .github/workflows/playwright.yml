@@ -10,64 +10,73 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test --reporter=html || true   # Generate HTML report
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test || true   # Ensure workflow continues even if tests fail
+      - name: Debug: List Playwright Report Directory
+        run: |
+          echo "Checking Playwright report directory..."
+          ls -la playwright-report/ || echo "playwright-report/ not found!"
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()  # Ensures reports are uploaded even if tests fail
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
-    - name: Upload Playwright Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 7
 
   deploy-report:
     needs: test
     runs-on: ubuntu-latest
     if: always()
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    # Download the report from the previous job
-    - name: Download Playwright Report
-      uses: actions/download-artifact@v4
-      with:
-        name: playwright-report
-        path: playwright-report/
+      # Ensure artifact is downloaded before checking files
+      - name: Download Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
 
-    - name: Deploy Playwright Report to GitHub Pages
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        
-        git fetch origin main || true
-        git checkout -B main
+      # Debug: List all files in the workspace
+      - name: Debug: Verify Downloaded Files
+        run: |
+          echo "Listing root directory:"
+          ls -la
+          echo "Listing playwright-report directory:"
+          ls -la playwright-report/ || echo "ERROR: playwright-report/ not found!"
 
-        echo "Checking if playwright-report exists before copying..."
-        ls -la playwright-report/ || echo "playwright-report/ is missing!"
-        rm -rf *
-        
-        # Debug: Verify again before copying
-        echo "Checking if playwright-report exists before copying..."
-        ls -la playwright-report/ || echo "playwright-report/ is missing!"
-        
-        # Ensure the directory exists before copying
-        if [ -d "playwright-report" ]; then
-          cp -r playwright-report/* .  # FIXED: Correct way to copy
-        else
-          echo "ERROR: playwright-report directory is missing!"
-          exit 1
-        fi
-        
-        touch .nojekyll
-        
-        git add .
-        git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
-        git push origin gh-pages --force
+      - name: Deploy Playwright Report to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          
+          git fetch origin gh-pages || true
+          git checkout -B gh-pages
+          
+          rm -rf *
+          
+          echo "Checking if playwright-report exists before copying..."
+          ls -la playwright-report/ || echo "ERROR: playwright-report is missing!"
+          
+          if [ -d "playwright-report" ]; then
+            cp -r playwright-report/* .
+          else
+            echo "ERROR: playwright-report directory is missing!"
+            exit 1
+          fi
+          
+          touch .nojekyll
+          
+          git add .
+          git commit -m "Update Playwright Test Report [$(date)]" || echo "No changes to commit"
+          git push origin gh-pages --force
